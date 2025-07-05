@@ -43,7 +43,7 @@ async def Process(worker_id):
         s = str(result)
         os.remove(fp)
         print(f"[Consumer{worker_id}] deleted file {fp}")
-        if re.search(r"下单成功.*?支付", s):
+        if re.search(r"(锁票成功|锁票中|下单成功.*?支付|下单成功|锁票|支付)", s):
             print("匹配成功！准备拨打电话")
             AliyunVoiceService.VoiceService.main("")  # 填手机号
             AutoCGSnapshot(base_path)
