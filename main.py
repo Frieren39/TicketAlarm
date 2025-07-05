@@ -4,6 +4,7 @@ import os
 import pyautogui
 import easyocr
 import re
+import time
 import AliyunVoiceService
 
 base_path = r"E:\tmp\screenshot"
@@ -23,18 +24,22 @@ async def SnapShot():
     while True:
         now = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
         fp = os.path.join(base_path, f"screenshot{now}.png")
-        pyautogui.screenshot().save(fp)
-        await image_queue.put(fp)
-        print(f"[Producer] added {fp}")
+        try:
+            img = pyautogui.screenshot()
+            img.save(fp)
+            await image_queue.put(fp)
+            print(f"[Producer] added {fp}")
+        except OSError as e:
+            print(f"[Producer] Screenshot failed: {e}")
         await asyncio.sleep(1)
 
 async def Process(worker_id):
-    reader = easyocr.Reader(['ch_sim', 'en'], gpu=False)
+    reader = easyocr.Reader(['ch_sim', 'en'], gpu=True)
     loop = asyncio.get_running_loop()
     while True:
         fp = await image_queue.get()
         print(f"[Consumer{worker_id}] processing {fp}")
-        result = await loop.run_in_executor(None, reader.readtext, fp, 0)
+        result = await loop.run_in_executor(None, lambda: reader.readtext(fp, detail=0))
         s = str(result)
         os.remove(fp)
         print(f"[Consumer{worker_id}] deleted file {fp}")
