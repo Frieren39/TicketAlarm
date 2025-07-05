@@ -18,7 +18,8 @@ def GetSnapshot():
         return file_path
 
 def OCRSnapshot(file_path):
-    reader = easyocr.Reader(['ch_sim', 'en'])
+    reader = easyocr.Reader(['ch_sim', 'en'], gpu=True)
+    print(f"正在处理{file_path}")
     result = reader.readtext(file_path,detail=0)
     return result
 
