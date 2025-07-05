@@ -83,5 +83,5 @@ class VoiceService:
 
 if __name__ == '__main__':
     #测试用，最终用户无需在意
-    DialNumber = "15901758049"
+    DialNumber = "" #写手机号
     VoiceService.main(DialNumber)
