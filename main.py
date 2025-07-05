@@ -15,7 +15,6 @@ def GetSnapshot():
         screenshot.save(f"{path}\\screenshot{now_str}.png")
         file_path = f"{path}\\screenshot{now_str}.png"
         print(f"要保存的路径是{file_path}")
-        time.sleep(3)
         return file_path
 
 def OCRSnapshot(file_path):
