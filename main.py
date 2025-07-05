@@ -4,7 +4,7 @@ import datetime
 import easyocr
 import re
 import os
-import VoiceService
+import AliyunVoiceService
 import logging
 
 def GetSnapshot():
@@ -44,14 +44,15 @@ if __name__ == "__main__":
         result = OCRSnapshot(file_path)
         str_result = str(result)
         print(result) #调试用
+        logging.info(str_result) #调试用
         match = re.search(r"下单成功.*?支付",str_result)
         if match:
             print("抢到了喵，要开始给你打电话了喵",match.group())
-            DialNumber=""
+            DialNumber="15901758049"
             # 要被拨打电话的号码，如果有多个建议用List，然后自己改一下VoiceService的main方法
-            #调用Aliyun服务
-            str_DialNumber=str(DialNumber)
-            result = VoiceService.VoiceService.main(str_DialNumber)
+            # 调用语音通知服务
+            str_DialNumber = str(DialNumber)
+            result = AliyunVoiceService.VoiceService.main(str_DialNumber)
             print(result)
             base_path = r"E:\tmp\screenshot"
             AutoCGSnapshot(base_path)
