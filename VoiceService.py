@@ -24,8 +24,8 @@ class VoiceService:
     @staticmethod
     def create_client() -> Dyvmsapi20170525Client:
         sts_config = CredConfig(
-            access_key_id="",
-            access_key_secret=""
+            access_key_id=os.getenv('STS_ACCESS_KEY_ID'),
+            access_key_secret=os.getenv('STS_ACCESS_KEY_SECRET'),
         )
         CredConfig.endpoint = "sts.aliyuncs.com"
         stsClient = Sts20150401Client(sts_config)
@@ -34,9 +34,9 @@ class VoiceService:
             # 会话有效时间
             duration_seconds=14400,
             # 要扮演的RAM角色ARN，示例值：acs:ram::123456789012****:role/adminrole，可以通过环境变量ALIBABA_CLOUD_ROLE_ARN设置role_arn
-            role_arn='',
+            role_arn=os.getenv('STS_ROLE_ARN'),
             # 角色会话名称，可以通过环境变量ALIBABA_CLOUD_ROLE_SESSION_NAME设置role_session_name
-            role_session_name=''
+            role_session_name=os.getenv('STS_ROLE_SESSION_NAME'),
         )
         runtime = RuntimeOptions()
         try:
@@ -62,7 +62,7 @@ class VoiceService:
         client = VoiceService.create_client()
         single_call_by_voice_request = dyvmsapi_20170525_models.SingleCallByVoiceRequest(
             called_number=f'{DialNumber}',
-            voice_code=''
+            voice_code='0d000721.mp3'
         )
         runtime = util_models.RuntimeOptions()
         try:
@@ -85,5 +85,5 @@ class VoiceService:
 
 if __name__ == '__main__':
     #测试用，最终用户无需在意
-    DialNumber = ""
+    DialNumber = "15901758049"
     VoiceService.main(DialNumber)
