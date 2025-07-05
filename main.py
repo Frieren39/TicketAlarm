@@ -54,5 +54,5 @@ async def main():
     await asyncio.gather(producer, *consumers)
 
 if __name__ == "__main__":
-    print("确保票程序在前台，无其他干扰")
+    print("确保抢票程序在前台，无其他干扰")
     asyncio.run(main())
