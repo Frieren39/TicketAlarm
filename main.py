@@ -1,65 +1,58 @@
-import pyautogui
-import time
+import asyncio
 import datetime
+import os
+import pyautogui
 import easyocr
 import re
-import os
 import AliyunVoiceService
-import logging
 
-def GetSnapshot():
-        path = r"E:\tmp\screenshot"
-        screenshot = pyautogui.screenshot()
-        now = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
-        now_str = str(now)
-        screenshot.save(f"{path}\\screenshot{now_str}.png")
-        file_path = f"{path}\\screenshot{now_str}.png"
-        print(f"要保存的路径是{file_path}")
-        return file_path
-
-def OCRSnapshot(file_path):
-    reader = easyocr.Reader(['ch_sim', 'en'], gpu=True)
-    print(f"正在处理{file_path}")
-    result = reader.readtext(file_path,detail=0)
-    return result
+base_path = r"E:\tmp\screenshot"
+image_queue = asyncio.Queue()
 
 def AutoCGSnapshot(base_path):
-    Clean_Status = False
-    for root_dir, _, files in os.walk(base_path):
-        for fname in files:
-            if not fname.lower().endswith((".png")):
-                continue
-            full_path = os.path.join(root_dir, fname)
-            os.remove(full_path)
-            print(f"删掉了{full_path}")
-            Clean_Status = True
-    if Clean_Status == False:
+    cleaned = False
+    for root, _, files in os.walk(base_path):
+        for f in files:
+            if f.lower().endswith(".png"):
+                os.remove(os.path.join(root, f))
+                cleaned = True
+    if not cleaned:
         print("Nothing to clean")
 
-
-if __name__ == "__main__":
-    print("请保证抢票程序在前台，并确保前台干净，无其他程序干扰OCR！")
-    base_path = r"E:\tmp\screenshot"
-    AutoCGSnapshot(base_path)  # 初始化文件夹，删掉上一次使用的内容
+async def SnapShot():
     while True:
-        file_path = GetSnapshot() #测试时注释
-        result = OCRSnapshot(file_path)
-        str_result = str(result)
-        #print(result) #调试用
-        #logging.info(str_result) #调试用
-        match = re.search(r"下单成功.*?支付",str_result)
-        if match:
-            print("抢到了喵，要开始给你打电话了喵",match.group())
-            DialNumber=""# 写手机号
-            # 要被拨打电话的号码，如果有多个建议用List，然后自己改一下VoiceService的main方法
-            # 调用语音通知服务
-            str_DialNumber = str(DialNumber)
-            result = AliyunVoiceService.VoiceService.main(str_DialNumber)
-            print(result)
+        now = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
+        fp = os.path.join(base_path, f"screenshot{now}.png")
+        pyautogui.screenshot().save(fp)
+        await image_queue.put(fp)
+        print(f"[Producer] added {fp}")
+        await asyncio.sleep(1)
+
+async def Process(worker_id):
+    reader = easyocr.Reader(['ch_sim', 'en'], gpu=False)
+    loop = asyncio.get_running_loop()
+    while True:
+        fp = await image_queue.get()
+        print(f"[Consumer{worker_id}] processing {fp}")
+        result = await loop.run_in_executor(None, reader.readtext, fp, 0)
+        s = str(result)
+        os.remove(fp)
+        print(f"[Consumer{worker_id}] deleted file {fp}")
+        if re.search(r"下单成功.*?支付", s):
+            print("匹配成功！准备拨打电话")
+            AliyunVoiceService.VoiceService.main("")  # 填手机号
             AutoCGSnapshot(base_path)
             break
         else:
-            # 觉得烦人可以注释掉
-            print("还没有喵，请耐心等待喵")
-            print(str_result)
+            print("还没匹配到", s)
+        image_queue.task_done()
 
+async def main():
+    AutoCGSnapshot(base_path)
+    producer = asyncio.create_task(SnapShot())
+    consumers = [asyncio.create_task(Process(i)) for i in range(2)]
+    await asyncio.gather(producer, *consumers)
+
+if __name__ == "__main__":
+    print("确保票程序在前台，无其他干扰")
+    asyncio.run(main())
