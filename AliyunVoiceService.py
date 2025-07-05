@@ -15,6 +15,7 @@ from alibabacloud_sts20150401.models import AssumeRoleRequest
 from alibabacloud_tea_util import models as util_models
 from alibabacloud_tea_util.models import RuntimeOptions
 from alibabacloud_tea_util.client import Client as UtilClient
+from alibabacloud_tea_openapi.models import Config as OpenConfig
 
 
 class VoiceService:
@@ -23,11 +24,11 @@ class VoiceService:
 
     @staticmethod
     def create_client() -> Dyvmsapi20170525Client:
-        sts_config = CredConfig(
+        sts_config = OpenConfig(
             access_key_id=os.getenv('STS_ACCESS_KEY_ID'),
             access_key_secret=os.getenv('STS_ACCESS_KEY_SECRET'),
         )
-        CredConfig.endpoint = "sts.aliyuncs.com"
+        sts_config.endpoint = "sts.aliyuncs.com"
         stsClient = Sts20150401Client(sts_config)
 
         assume_role_request = AssumeRoleRequest(
@@ -60,21 +61,18 @@ class VoiceService:
     @staticmethod
     def main(DialNumber):
         client = VoiceService.create_client()
-        single_call_by_voice_request = dyvmsapi_20170525_models.SingleCallByVoiceRequest(
+        single_call_by_tts_request = dyvmsapi_20170525_models.SingleCallByTtsRequest(
             called_number=f'{DialNumber}',
-            voice_code='0d000721.mp3'
+            tts_code='TTS_322455017' #写申请好的语音模板
         )
         runtime = util_models.RuntimeOptions()
         try:
-            result = client.single_call_by_voice_with_options(single_call_by_voice_request, runtime)
-            if result.body.code == "OK":
-                RequestId = result.body.request_id
-                CalledID = result.body.call_id
-                return f"OK, RequestId: {RequestId}, CalledID: {CalledID}"
-            else:
-                RequestId = result.body.request_id
-                CalledID = result.body.call_id
-                return f"[ERROR],没有成功打出去电话,请检查你的阿里云相关设置, RequestId: {RequestId}, CalledID: {CalledID}"
+            # 复制代码运行请自行打印 API 的返回值
+            result = client.single_call_by_tts_with_options(single_call_by_tts_request, runtime)
+            status_code = result.body.code
+            RequestId = result.body.request_id
+            CallIdID = result.body.call_id
+            return f"电话成功拨出，status_code{status_code}, RequestId{RequestId}, CallIdID{CallIdID}"
         except Exception as error:
             # 此处仅做打印展示，请谨慎对待异常处理，在工程项目中切勿直接忽略异常。
             # 错误 message
