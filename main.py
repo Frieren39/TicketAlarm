@@ -38,9 +38,9 @@ def AutoCGSnapshot(base_path):
 
 if __name__ == "__main__":
     print("请保证抢票程序在前台，并确保前台干净，无其他程序干扰OCR！")
+    base_path = r"E:\tmp\screenshot"
+    AutoCGSnapshot(base_path)  # 初始化文件夹，删掉上一次使用的内容
     while True:
-        base_path = r"E:\tmp\screenshot"
-        AutoCGSnapshot(base_path) #初始化文件夹，删掉上一次使用的内容
         file_path = GetSnapshot() #测试时注释
         #file_path = r"E:\tmp\screenshot\2.png" #1是失败案例，2是成功案例
         result = OCRSnapshot(file_path)
