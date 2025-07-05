@@ -1,0 +1,7 @@
+PyAutoGUI>=0.9.54
+easyocr>=1.7.2
+alibabacloud_dyvmsapi20170525>=1.0.8
+alibabacloud_credentials>=1.0.2
+alibabacloud_sts20150401>=1.0.5
+alibabacloud_tea_openapi>=0.3.8
+alibabacloud_tea_util>=0.3.6
