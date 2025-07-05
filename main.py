@@ -39,8 +39,8 @@ def AutoCGSnapshot(base_path):
 if __name__ == "__main__":
     print("请保证抢票程序在前台，并确保前台干净，无其他程序干扰OCR！")
     while True:
-        #file_path = GetSnapshot() #测试时注释
-        file_path = r"E:\tmp\screenshot\2.png" #1是失败案例，2是成功案例
+        file_path = GetSnapshot() #测试时注释
+        #file_path = r"E:\tmp\screenshot\2.png" #1是失败案例，2是成功案例
         result = OCRSnapshot(file_path)
         str_result = str(result)
         print(result) #调试用
