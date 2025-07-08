@@ -146,7 +146,7 @@ def main():
                     break
                 else:
                     logger.info("无事发生喵~")
-                    time.sleep(10)  # 没有获取到就停止10s
+                    time.sleep(20)  # 没有获取到就停止10s
             else:
                 logger.error("未能获取订单数据喵~")
         except KeyError as e:
