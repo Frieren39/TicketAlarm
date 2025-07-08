@@ -129,6 +129,7 @@ def get_valid_cookie():
         logger.info("删除了本地存储的错误的 cookie")
         dict_cookie = GetCookie()
         cookies = format_cookie(dict_cookie)
+        return cookies
     else:
         return cookies
 
