@@ -81,10 +81,10 @@ def check_cookies(_cookies):
         if response_body["code"] != 0:
             logger.info(response_body)
             logger.error("cookies 无效。")
-            print("cookies 无效")
+            return False
         else:
             logger.info(f"cookies 验证成功。欢迎 {response_body['data']['uname']}")
-            return
+            return True
     except requests.exceptions.RequestException as e:
         logger.error(f"验证登录失败: {e}")
         print(f"验证登录失败: {e}")
@@ -121,12 +121,22 @@ def get_order_list(_cookies):
         logger.error(f"请求失败: {_e}")
         return None
 
-def main():
-    init_logger(logging.INFO)
+def get_valid_cookie():
     dict_cookie = GetCookie()
     cookies = format_cookie(dict_cookie)
+    if check_cookies(cookies) == False:
+        os.remove('./cookie.json')
+        logger.info("删除了本地存储的错误的 cookie")
+        dict_cookie = GetCookie()
+        cookies = format_cookie(dict_cookie)
+    else:
+        return cookies
+
+
+def main():
+    init_logger(logging.INFO)
+    cookies = get_valid_cookie()
     logger.debug(f"获取到的cookie是{cookies}")
-    check_cookies(cookies)
     is_lock_ticket = False
     while is_lock_ticket is False:
         try:
