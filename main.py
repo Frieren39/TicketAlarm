@@ -44,7 +44,7 @@ async def SnapShot():
             print(f"[Producer] added {fp}")
         except OSError as e:
             print(f"[Producer] Screenshot failed: {e}")
-        await asyncio.sleep(1)
+        await asyncio.sleep(10)
 
 async def Process(worker_id):
     reader = easyocr.Reader(['ch_sim', 'en'], gpu=True)
