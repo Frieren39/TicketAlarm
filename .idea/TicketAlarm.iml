@@ -7,8 +7,13 @@
     <orderEntry type="jdk" jdkName="Python 3.12 (TicketAlarm)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
+<<<<<<< HEAD
   <component name="PyDocumentationSettings">
     <option name="format" value="PLAIN" />
     <option name="myDocStringFormat" value="Plain" />
+=======
+  <component name="PackageRequirementsSettings">
+    <option name="versionSpecifier" value="大于或等于 (&gt;=x.y.z)" />
+>>>>>>> b052e4d262851888d416d2a70fc7ec2fd5894de9
   </component>
 </module>
