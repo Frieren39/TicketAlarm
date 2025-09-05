@@ -1,5 +1,4 @@
 PyAutoGUI>=0.9.54
-easyocr>=1.7.2
 alibabacloud_dyvmsapi20170525>=3.2.2
 alibabacloud_credentials>=1.0.2
 alibabacloud_sts20150401>=1.0.5
