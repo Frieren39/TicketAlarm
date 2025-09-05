@@ -18,7 +18,6 @@ def order_brief(_order) -> str:
     )
 
 
-<<<<<<< HEAD
 def GetCookie():
     path = r'./cookie.json'
     if os.path.exists(path):
@@ -30,20 +29,6 @@ def GetCookie():
     with open(path, 'r',encoding="utf-8") as f:
         cookie = json.load(f)
         return cookie
-=======
-async def SnapShot():
-    while True:
-        now = datetime.datetime.now().strftime("%y%m%d_%H%M%S")
-        fp = os.path.join(base_path, f"screenshot{now}.png")
-        try:
-            img = pyautogui.screenshot()
-            img.save(fp)
-            await image_queue.put(fp)
-            print(f"[Producer] added {fp}")
-        except OSError as e:
-            print(f"[Producer] Screenshot failed: {e}")
-        await asyncio.sleep(10)
->>>>>>> b052e4d262851888d416d2a70fc7ec2fd5894de9
 
 
 def init_logger(log_level: int = logging.INFO) -> None:

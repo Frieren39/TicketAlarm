@@ -1,6 +1,7 @@
 <component name="InspectionProjectProfileManager">
   <profile version="1.0">
     <option name="myName" value="Project Default" />
+<<<<<<< HEAD
     <inspection_tool class="PyPackageRequirementsInspection" enabled="true" level="WARNING" enabled_by_default="true">
       <option name="ignoredPackages">
         <value>
@@ -28,6 +29,13 @@
             <item index="20" class="java.lang.String" itemvalue="retry" />
           </list>
         </value>
+=======
+    <inspection_tool class="PyPep8Inspection" enabled="true" level="WEAK WARNING" enabled_by_default="true">
+      <option name="ignoredErrors">
+        <list>
+          <option value="E302" />
+        </list>
+>>>>>>> b052e4d262851888d416d2a70fc7ec2fd5894de9
       </option>
     </inspection_tool>
   </profile>
