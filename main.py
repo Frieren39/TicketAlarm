@@ -171,7 +171,7 @@ def main():
     if is_lock_ticket:
         logger.info("喵呜！有被锁定的票喵！")
         logger.info("要给你打电话了喵!")
-        AliyunVoiceService.VoiceService.main("PHONE_NUMBER") #加你的电话号码
+        AliyunVoiceService.VoiceService.main("") #加你的电话号码
     else:
         logger.info("呜~本次运行没有发现未付款的票票")
 
